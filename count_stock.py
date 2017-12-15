@@ -1,52 +1,22 @@
-import sys
-import json
-import ast
-from connect import *
+import sys, sqlite3, json
 
-# input_data = json.loads(sys.argv[1])
-print sys.argv[1]
-print "+++++++++++"
+company_db_file = 'company_data.db'
 
-#Base SQL query
-base_query = "SELECT * FROM `product_info` WHERE "
-key_count = 0
-try:
-    if(type (json.loads(sys.argv[1])) is dict):
-        user_input = json.loads(sys.argv[1]) #converts input string to dictionary
-        for key in user_input:
-           # print "key: %s , value: %s" % (key, user_input[key])
-           if(key_count < 1):
-               base_query += "`"+str(key)+"`='"+str(user_input[key])+"'"
-               key_count +=1
-           else:
-               base_query += " AND `"+str(key)+"`='"+str(user_input[key])+"'"
-    else:
-        print "Oops, invalid input"
-        exit()
-except:
-    print "Oops, Invalid input. Please check."
-    exit()
+# Connect to the DB
+conn = sqlite3.connect(company_db_file)
+c = conn.cursor()
 
-print "+++++++++++++++"
-print base_query;
+# Count and print stock numbers for product id
+for arg in sys.argv[1:]:
+    # print("-------xxx-----")
+    # print arg
+    # print("-------xxx-----")
+    input_json = json.loads(arg)
+    # print("------------")
+    # print ("SELECT amount FROM product WHERE id = " + str(input_json['productId']))
+    # print("------------")
+    c.execute("SELECT amount FROM product WHERE id = " + str(input_json['productId']))
+    sys.stdout.write(str(c.fetchall())+ "\n")
 
-def queryDb():
-    # MySQL query
-    query = (base_query)
-
-    query_data = (user_input)
-
-    cursor.execute(query)
-    result = cursor.fetchall()
-    print "---------"
-    print result
-    print "---------"
-    cursor.close()
-    cnx.close()
-
-# if(user_input['productId']):
-#     queryDb(user_input['productId'])
-# else:
-#     print "Sorry, Invalid input"
-
-queryDb()
+conn.commit()
+conn.close()

@@ -6,11 +6,11 @@ import ast
 
 
 def create_connection(db_file):
-    """ create a database connection to the SQLite database
-        specified by the db_file
-    :db_file: database file
-    :return: Connection object or None
-    """
+    # """ create a database connection to the SQLite database
+    #     specified by the db_file
+    # :db_file: database file
+    # :return: Connection object or None
+    # """
     try:
         conn = sqlite3.connect(db_file)
         return conn
@@ -19,28 +19,11 @@ def create_connection(db_file):
 
     return None
 
-def select_all_items(conn):
-    """
-    This is a sample function to get all items from the product_info table
-    Query all rows in the product table
-    :param conn: the Connection object
-    :return:
-    """
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM product_info")
-
-    rows = cur.fetchall()
-
-    for row in rows:
-        print(row)
-
 def queryDb(conn, base_query): #Main function to query the database, all user inputs gets queried via this function
     try:
-        # print conn.cursor().execute(base_query)
         cur = conn.cursor()
         cur.execute(base_query)
         # cur.execute('''SELECT sqlite_version()''') #Check database version
-        # print cur
         rows = cur.fetchall()
         print rows
         # for row in rows:
@@ -51,7 +34,7 @@ def queryDb(conn, base_query): #Main function to query the database, all user in
         print(e)
 
 def main():
-    database = "db/company_data.db"
+    database = "company_data.db"
 
     # create a database connection
     conn = create_connection(database)
@@ -60,7 +43,7 @@ def main():
         print sys.argv[1]
         print "+++++++++++"
         #Base SQL query
-        base_query = "SELECT count(*) FROM product_info WHERE "
+        base_query = "SELECT amount FROM product WHERE "
         key_count = 0 #Used as a counter if there are multiple items in the dictionary/json
         try:
             if(type (json.loads(sys.argv[1])) is dict):
@@ -85,8 +68,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-
-# Code Exploits
-# 1. python count.py "{\"productId\":\"1' OR productId = '2\"}"
