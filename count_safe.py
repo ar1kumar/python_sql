@@ -67,23 +67,23 @@ def main():
         # e_q = ()
         # query_values = list(e_q)
         query_values = ()
-        
+
         try:
             if(type (json.loads(sys.argv[1])) is dict):
                 user_input = json.loads(sys.argv[1]) #converts input string to dictionary
                 for key in user_input:
-                   print "key: %s , value: %s" % (key, user_input[key])
-                   print key_count
+                   # print "key: %s , value: %s" % (key, user_input[key])
+                   # print key_count
                    if(key_count < 1):
-                       base_query += str(key)+"=?"
+                       base_query += "id=?"
                        query_values += (user_input[key],)
                        key_count +=1
                    else:
-                       base_query += " AND "+str(key)+"=?"
-                       query_values += (user_input[key],)
+                       print "Query already executed"
+                       exit()
+                       # base_query += " AND "+str(key)+"=?"
+                       # query_values += (user_input[key],)
 
-                # query_vals = tuple(query_values)
-                # Call queryDb() function with required parameters to execute the query
                 queryDb(conn, base_query, query_values)
             else:
                 print "Oops, invalid input"
@@ -96,6 +96,3 @@ def main():
 if __name__ == '__main__':
     # Main function, the program execution starts here
     main()
-
-
-# "{\"id\":\"1\"}"
